@@ -7,6 +7,7 @@ import com.security_app.model_entity.user_dtos.UserUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.security_app.service.UserService;
 
@@ -29,13 +30,13 @@ public class UserController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN') or @securityUtil.isCurrentUser(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtil.isCurrentUser(#id)")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
@@ -43,20 +44,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN') or @securityUtil.isCurrentUser(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtil.isCurrentUser(#id)")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         return ResponseEntity.ok(userService.updateUser(id, userUpdateDto));
     }
 
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/roles")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> changeUserRole(
             @PathVariable Long id,
             @RequestParam String role,
@@ -66,7 +67,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/status")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> toggleUserStatus(@PathVariable Long id) {
         userService.toggleUserStatus(id);
         return ResponseEntity.ok().build();

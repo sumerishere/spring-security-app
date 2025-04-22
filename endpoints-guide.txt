@@ -67,3 +67,25 @@ DELETE-: /api/users/{id}
 Authorization: Basic admin admin
 
 
+
+-------------------------------------------------------
+
+
+For the request: -  PATCH /api/users/{id}/status 
+                    Basic Admin authentication, the expected output would be:
+
+Response Status: HTTP 200 OK
+Response Body: Empty (since the endpoint returns ResponseEntity.ok().build() which doesn't include a body)
+
+What this endpoint does functionally:
+
+It toggles the user's enabled status (from enabled to disabled or from disabled to enabled)
+If the user was previously enabled (enabled = true), the status will be changed to disabled (enabled = false)
+If the user was previously disabled (enabled = false), the status will be changed to enabled (enabled = true)
+
+This is a common administrative action that allows admins to temporarily deactivate user accounts without deleting them. When a user is disabled (enabled = false), they won't be able to authenticate even with the correct credentials because the CustomUserDetailsService passes the enabled status to Spring Security's User object.
+If the request fails for any reason (like if the user ID doesn't exist), you would instead receive:
+
+A 404 Not Found response if the user doesn't exist
+A 403 Forbidden if you're not authenticated as an admin
+
