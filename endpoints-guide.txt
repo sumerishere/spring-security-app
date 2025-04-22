@@ -1,0 +1,69 @@
+   //--------------------- spring security endpoints ------------------//
+
+
+------- API Endpoints ----------
+
+Register a User:
+POST-: /api/users/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123",
+  "email": "test@example.com",
+  "firstName": "Test",
+  "lastName": "User"
+}
+--------------------------------------
+
+Login:
+POST-: /api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+---------------------------------
+
+Get All Users (admin only):
+GET-: /api/users
+Authorization: Basic admin admin
+
+------------------------------------
+
+Get User by ID:
+GET- /api/users/{id}
+Authorization: Basic username password
+
+---------------------------------------
+
+Update User:
+PUT-: /api/users/{id}
+Content-Type: application/json
+Authorization: Basic username password
+
+{
+  "firstName": "Updated",
+  "lastName": "Name"
+}
+
+----------------------------------------
+
+Change User Role (admin only):
+PATCH /api/users/{id}/roles?role=ROLE_ADMIN&add=true
+Authorization: Basic admin admin
+
+-------------------------------------------------------
+Toggle User Status (admin only):
+PATCH /api/users/{id}/status
+Authorization: Basic admin admin
+
+------------------------------------------------------
+
+Delete User (admin only):
+DELETE-: /api/users/{id}
+Authorization: Basic admin admin
+
+
