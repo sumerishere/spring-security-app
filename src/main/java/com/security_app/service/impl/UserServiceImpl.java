@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void changeUserRole(Long id, String role, boolean add) {
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -141,13 +142,13 @@ public class UserServiceImpl implements UserService {
         } else {
             user.getRoles().remove(role);
         }
-
         userRepository.save(user);
     }
 
     @Override
     @Transactional
     public void toggleUserStatus(Long id) {
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -157,7 +158,9 @@ public class UserServiceImpl implements UserService {
 
     // Helper method to convert User entity to UserDto
     private UserDto convertToDto(User user) {
+
         UserDto dto = new UserDto();
+
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
@@ -165,6 +168,7 @@ public class UserServiceImpl implements UserService {
         dto.setLastName(user.getLastName());
         dto.setRoles(user.getRoles());
         dto.setEnabled(user.isEnabled());
+
         return dto;
     }
 }

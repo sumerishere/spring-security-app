@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 public class SecurityUtil {
 
     public boolean isCurrentUser(Long userId) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication == null || !authentication.isAuthenticated()) {
             return false;
         }
