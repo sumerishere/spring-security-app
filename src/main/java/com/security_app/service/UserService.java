@@ -24,4 +24,6 @@ public interface UserService {
     void changeUserRole(Long id, String role, boolean add);
 
     void toggleUserStatus(Long id);
+
+    Optional<UserDto> getUser(String username, String password);
 }

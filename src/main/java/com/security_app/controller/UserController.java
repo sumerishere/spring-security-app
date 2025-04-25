@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import com.security_app.model_entity.user_dtos.UserDto;
 import com.security_app.model_entity.user_dtos.UserRegistrationDto;
 import com.security_app.model_entity.user_dtos.UserUpdateDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.security_app.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -71,5 +73,26 @@ public class UserController {
     public ResponseEntity<Void> toggleUserStatus(@PathVariable Long id) {
         userService.toggleUserStatus(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<UserDto> authenticateUser(
+            @RequestParam String username,
+            @RequestParam String password) {
+
+        // Log authentication attempt (optional)
+//        logger.info("Authentication attempt for username: {}", username);
+
+        Optional<UserDto> authenticatedUser = userService.getUser(username, password);
+
+        return authenticatedUser
+                .map(userDto -> {
+//                    logger.info("User authenticated successfully: {}", username);
+                    return ResponseEntity.ok(userDto);
+                })
+                .orElseGet(() -> {
+//                    logger.warn("Authentication failed for username: {}", username);
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                });
     }
 }

@@ -171,4 +171,27 @@ public class UserServiceImpl implements UserService {
 
         return dto;
     }
+
+    @Override
+    public Optional<UserDto> getUser(String username, String password) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            // Check if user is enabled
+            if (!user.isEnabled()) {
+                return Optional.empty();
+            }
+
+            // Use passwordEncoder to verify the provided password against stored hash
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return Optional.of(convertToDto(user));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+
+
 }
